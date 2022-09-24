@@ -7,7 +7,7 @@ import "./SaleNFT.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract NFTMarketplace is Ownable {
-	uint256 TOKEN_PER_NFT = 10 ether;
+	uint256 constant TOKEN_PER_NFT = 10 ether;
 	
 	IERC20 public erc20Token;
 	SaleNFT public erc721Token;

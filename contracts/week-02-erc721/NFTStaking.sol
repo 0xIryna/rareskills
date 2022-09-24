@@ -8,14 +8,13 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract NFTStaking is IERC721Receiver, Ownable {
-	uint256 REWARD = 10 ether;
-	uint256 INTERVAL = 24 hours;
+	uint256 constant REWARD = 10 ether;
+	uint256 constant INTERVAL = 24 hours;
 	
 	IERC20 public erc20Token;
 	IERC721 public erc721Token;
-
-	mapping(uint256 => address) staked;
-	mapping(uint256 => uint256) lastRewardWithdrawal;
+	mapping(uint256 => address) public staked;
+	mapping(uint256 => uint256) public lastRewardWithdrawal;
 
 	constructor(address erc20TokenAddress, address erc721TokenAddress) {
 		require(erc20TokenAddress != address(0), "Invalid address");
@@ -36,7 +35,7 @@ contract NFTStaking is IERC721Receiver, Ownable {
 
 	function withdrawReward(uint256 tokenId) external {
 		require(msg.sender == staked[tokenId], "Not an NFT owner");
-		require(lastRewardWithdrawal[tokenId] + INTERVAL >= block.timestamp, "Try later");
+		require(block.timestamp >= lastRewardWithdrawal[tokenId] + INTERVAL, "Try later");
 		require(erc20Token.balanceOf(address(this)) >= REWARD, "Not enough token available");
 		erc20Token.transfer(msg.sender, REWARD);
 	}	
