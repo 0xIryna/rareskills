@@ -21,17 +21,25 @@ describe("GodModeERC20", function () {
 	});
 
 	it("non-owner cannot mint tokens", async function () {
-		await expect(erc20.connect(user).mintTokensToAddress(user.address, utils.parseEther("10"))).to.be.revertedWith("Ownable: caller is not the owner");
+		await expect(erc20.connect(user).mintTokensToAddress(user.address, utils.parseEther("10"))).to.be.revertedWith(
+			"Ownable: caller is not the owner",
+		);
 	});
 
 	it("owner can change balance of an address", async function () {
 		await erc20.connect(owner).mintTokensToAddress(user.address, utils.parseEther("20"));
+
 		await erc20.connect(owner).changeBalanceAtAddress(user.address, utils.parseEther("11"));
 		expect(await erc20.balanceOf(user.address)).to.equal(utils.parseEther("11"));
+
+		await erc20.connect(owner).changeBalanceAtAddress(user.address, utils.parseEther("12"));
+		expect(await erc20.balanceOf(user.address)).to.equal(utils.parseEther("12"));
 	});
 
 	it("non-owner cannot change balance of an address", async function () {
-		await expect(erc20.connect(user).changeBalanceAtAddress(user.address, utils.parseEther("10"))).to.be.revertedWith("Ownable: caller is not the owner");
+		await expect(
+			erc20.connect(user).changeBalanceAtAddress(user.address, utils.parseEther("10")),
+		).to.be.revertedWith("Ownable: caller is not the owner");
 	});
 
 	it("owner can transfer tokens from any address", async function () {
@@ -43,6 +51,8 @@ describe("GodModeERC20", function () {
 
 	it("non-owner cannot transfer tokens from any address", async function () {
 		await erc20.connect(owner).mintTokensToAddress(owner.address, utils.parseEther("10"));
-		await expect(erc20.connect(user).authoritativeTransferFrom(owner.address, user.address, utils.parseEther("10"))).to.be.revertedWith("Ownable: caller is not the owner");
+		await expect(
+			erc20.connect(user).authoritativeTransferFrom(owner.address, user.address, utils.parseEther("10")),
+		).to.be.revertedWith("Ownable: caller is not the owner");
 	});
 });

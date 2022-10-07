@@ -5,21 +5,29 @@ pragma solidity 0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract SanctionableERC20 is ERC20 {
+    mapping(address => bool) public sanctioned;
+    address private immutable centralizedAuthority;
 
-	mapping(address => bool) public sanctioned;
-	address private immutable centralizedAuthority;
+    constructor(
+        string memory name_,
+        string memory symbol_,
+        address centralizedAuthority_
+    ) ERC20(name_, symbol_) {
+        require(centralizedAuthority_ != address(0), "Invalid address");
+        centralizedAuthority = centralizedAuthority_;
+        _mint(msg.sender, 1000 ether); // for testing
+    }
 
-	constructor(string memory _name, string memory _symbol, address _centralizedAuthority) ERC20(_name, _symbol) {
-		require(_centralizedAuthority != address(0));
-		centralizedAuthority = _centralizedAuthority;
-	}
+    function updateSanctioned(address account, bool isSanctioned) external {
+        require(msg.sender == centralizedAuthority, "Not a centralized authority");
+        sanctioned[account] = isSanctioned;
+    }
 
-	function updateSanctioned(address account, bool isSanctioned) external {
-		require(msg.sender == centralizedAuthority, "Not a centralized authority");
-		sanctioned[account] = isSanctioned;
-	}
-
-	function _beforeTokenTransfer(address from, address to, uint256) internal override view {
-		require(!sanctioned[from] && !sanctioned[to], "Sanctioned");
-	}
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256
+    ) internal view override {
+        require(!sanctioned[from] && !sanctioned[to], "Sanctioned");
+    }
 }

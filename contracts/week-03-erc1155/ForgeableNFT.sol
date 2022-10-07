@@ -10,6 +10,8 @@ contract ForgeableNFT is ERC1155, Ownable {
 
     address public marketplace;
 
+    event MarketPlaceChanged(address indexed _newMarketPlace);
+
     constructor(string memory uri_) ERC1155(uri_) {}
 
     modifier onlyMarketplace() {
@@ -18,8 +20,9 @@ contract ForgeableNFT is ERC1155, Ownable {
     }
 
     function setMarketplace(address marketplaceAddress) external onlyOwner {
-        require(msg.sender != address(0), "Invalid address");
+        require(marketplaceAddress != address(0), "Invalid address");
         marketplace = marketplaceAddress;
+        emit MarketPlaceChanged(marketplaceAddress);
     }
 
     function mint(address to, uint256 id) external onlyMarketplace {
@@ -30,11 +33,7 @@ contract ForgeableNFT is ERC1155, Ownable {
         _burn(from, id, 1);
     }
 
-    function balanceOfAllTokens(address account)
-        external
-        view
-        returns (uint256[] memory)
-    {
+    function balanceOfAllTokens(address account) external view returns (uint256[] memory) {
         uint256[] memory balances = new uint256[](MAX_TOKEN_SUPPLY);
 
         for (uint256 i = 0; i < MAX_TOKEN_SUPPLY; i++) {

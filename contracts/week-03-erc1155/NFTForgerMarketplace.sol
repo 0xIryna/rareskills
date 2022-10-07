@@ -17,21 +17,16 @@ contract NFTForgerMarketplace {
 
     function mint(uint256 tokenId) external {
         require(tokenId <= MAX_MINTABLE_TOKEN, "Only tokens 0-2 can be minted");
-        require(
-            mintTime[msg.sender] + COOLDOWN <= block.timestamp,
-            "Try later"
-        );
-        nft.mint(msg.sender, tokenId);
+        require(mintTime[msg.sender] + COOLDOWN <= block.timestamp, "Try later");
+
         mintTime[msg.sender] = block.timestamp;
+        nft.mint(msg.sender, tokenId);
     }
 
     function trade(uint256 tokenIdIn, uint256 tokenIdOut) external {
         require(tokenIdIn != tokenIdOut, "Token Ids must be different");
         require(tokenIdOut <= MAX_MINTABLE_TOKEN, "Token out must be 0-2");
-        require(
-            nft.balanceOf(msg.sender, tokenIdIn) > 0,
-            "Insufficient balance"
-        );
+        require(nft.balanceOf(msg.sender, tokenIdIn) > 0, "Insufficient balance");
         nft.burn(msg.sender, tokenIdIn);
         nft.mint(msg.sender, tokenIdOut);
     }
@@ -45,7 +40,7 @@ contract NFTForgerMarketplace {
     function forge(uint256[] calldata tokenIdsToBurn) external {
         uint256 length = tokenIdsToBurn.length;
         require(length == 2 || length == 3, "Incorrect number of tokens");
-        uint256 tokenIdToMint;
+        uint256 tokenIdToMint = 0;
 
         if (length == 2) {
             if (tokenIdsToBurn[0] == 0) {
@@ -58,11 +53,7 @@ contract NFTForgerMarketplace {
             } else if (tokenIdsToBurn[0] == 1 && tokenIdsToBurn[1] == 2) {
                 tokenIdToMint = 4;
             }
-        } else if (
-            tokenIdsToBurn[0] == 0 &&
-            tokenIdsToBurn[1] == 1 &&
-            tokenIdsToBurn[2] == 2
-        ) {
+        } else if (tokenIdsToBurn[0] == 0 && tokenIdsToBurn[1] == 1 && tokenIdsToBurn[2] == 2) {
             tokenIdToMint = 6;
         }
 

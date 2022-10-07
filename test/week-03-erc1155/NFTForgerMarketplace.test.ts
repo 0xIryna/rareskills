@@ -85,7 +85,41 @@ describe("NFTForgerMarketplace", function () {
 				});
 
 				it("reverts when tokens supplied in the wrong order", async function () {
-					await expect(marketplace.connect(user).forge([1, 0])).to.be.revertedWith("Tokens or their order are incorrect");
+					await expect(marketplace.connect(user).forge([1, 0])).to.be.revertedWith(
+						"Tokens or their order are incorrect",
+					);
+				});
+
+				it("reverts when trading same tokens", async function () {
+					await expect(marketplace.connect(user).trade(0, 0)).to.be.revertedWith(
+						"Token Ids must be different",
+					);
+				});
+
+				it("reverts when trading wrong token", async function () {
+					await expect(marketplace.connect(user).trade(0, 3)).to.be.revertedWith("Token out must be 0-2");
+				});
+
+				it("reverts when balance of tokenIn is insufficient", async function () {
+					await expect(marketplace.connect(owner).trade(1, 0)).to.be.revertedWith("Insufficient balance");
+				});
+
+				it("it trades token 0 for token 2", async function () {
+					await marketplace.connect(user).trade(0, 2);
+					expect(await nft.balanceOf(user.address, 0)).to.equal(0);
+					expect(await nft.balanceOf(user.address, 2)).to.equal(2);
+				});
+
+				it("reverts when burning invalid token", async function () {
+					await expect(marketplace.connect(owner).burn(0)).to.be.reverted;
+				});
+
+				it("it burns token 3", async function () {
+					await marketplace.connect(user).forge([0, 1]);
+					expect(await nft.balanceOf(user.address, 3)).to.equal(1);
+
+					await marketplace.connect(user).burn(3);
+					expect(await nft.balanceOf(user.address, 3)).to.equal(0);
 				});
 			});
 		});

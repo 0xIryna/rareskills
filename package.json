@@ -4,10 +4,12 @@
 	"description": "Metana Bootcamp Deliverables",
 	"scripts": {
 		"compile": "hardhat compile",
-		"test": "hardhat test"
+		"test": "hardhat test",
+		"coverage": "hardhat coverage"
 	},
 	"dependencies": {
-		"@openzeppelin/contracts": "4.7.3"
+		"@openzeppelin/contracts": "4.7.3",
+		"solidity-coverage": "^0.8.2"
 	},
 	"devDependencies": {
 		"@nomiclabs/hardhat-ethers": "^2.0.2",
@@ -17,7 +19,10 @@
 		"@types/chai": "^4.2.22",
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^18.7.18",
+		"@typescript-eslint/eslint-plugin": "^5.39.0",
+		"@typescript-eslint/parser": "^5.39.0",
 		"chai": "^4.3.4",
+		"eslint": "^8.24.0",
 		"ethereum-waffle": "^3.2.0",
 		"ethers": "^5.5.0",
 		"hardhat": "^2.6.7",
