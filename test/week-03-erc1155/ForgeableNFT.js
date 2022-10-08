@@ -1,19 +1,17 @@
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ForgeableNFT } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
 
 describe("ForgeableNFT", function () {
-	let owner: SignerWithAddress;
-	let user: SignerWithAddress;
-	let marketplace: SignerWithAddress;
-	let erc721: ForgeableNFT;
+	let owner;
+	let user;
+	let marketplace;
+	let erc721;
 	const tokenId = 0;
 
 	beforeEach(async function () {
 		[owner, user, marketplace] = await ethers.getSigners();
 		const erc721Factory = await ethers.getContractFactory("ForgeableNFT");
-		erc721 = (await erc721Factory.connect(owner).deploy("")) as ForgeableNFT;
+		erc721 = await erc721Factory.connect(owner).deploy("ipfs://QmePheK3iGURiuzw8qJhcpj1NVWN1cQyZEgF5x6KQF2XZ9/");
 	});
 
 	it("user cannot set marketplace", async function () {

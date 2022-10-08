@@ -1,27 +1,24 @@
-import { ethers } from "hardhat";
-import { BigNumber } from "ethers";
-import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { SaleNFT, Token, NFTMarketplace } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
 
 describe("SaleNFT", function () {
-	let owner: SignerWithAddress;
-	let user: SignerWithAddress;
-	let erc721: SaleNFT;
-	let erc20: Token;
-	let marketplace: NFTMarketplace;
-	let tokenPerNFT: BigNumber;
+	let owner;
+	let user;
+	let erc721;
+	let erc20;
+	let marketplace;
+	let tokenPerNFT;
 
 	beforeEach(async function () {
 		[owner, user] = await ethers.getSigners();
 		const erc721Factory = await ethers.getContractFactory("SaleNFT");
-		erc721 = (await erc721Factory.connect(owner).deploy()) as SaleNFT;
+		erc721 = await erc721Factory.connect(owner).deploy();
 
 		const erc20Factory = await ethers.getContractFactory("Token");
-		erc20 = (await erc20Factory.connect(owner).deploy("Test", "TEST")) as Token;
+		erc20 = await erc20Factory.connect(owner).deploy("Test", "TEST");
 
 		const marketplaceFactory = await ethers.getContractFactory("NFTMarketplace");
-		marketplace = (await marketplaceFactory.connect(owner).deploy(erc20.address, erc721.address)) as NFTMarketplace;
+		marketplace = await marketplaceFactory.connect(owner).deploy(erc20.address, erc721.address);
 
 		tokenPerNFT = await marketplace.TOKEN_PER_NFT();
 		await erc20.connect(user).approve(marketplace.address, tokenPerNFT);

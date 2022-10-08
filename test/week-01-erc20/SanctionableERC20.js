@@ -1,20 +1,16 @@
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { SanctionableERC20 } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
 
 describe("SanctionableERC20", function () {
-	let owner: SignerWithAddress;
-	let user: SignerWithAddress;
-	let centralizedAuthority: SignerWithAddress;
-	let erc20: SanctionableERC20;
+	let owner;
+	let user;
+	let centralizedAuthority;
+	let erc20;
 
 	beforeEach(async function () {
 		[owner, user, centralizedAuthority] = await ethers.getSigners();
 		const erc20Factory = await ethers.getContractFactory("SanctionableERC20");
-		erc20 = (await erc20Factory
-			.connect(owner)
-			.deploy("Test", "TEST", centralizedAuthority.address)) as SanctionableERC20;
+		erc20 = await erc20Factory.connect(owner).deploy("Test", "TEST", centralizedAuthority.address);
 
 		erc20.connect(owner).transfer(user.address, "1000");
 	});

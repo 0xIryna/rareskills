@@ -1,13 +1,12 @@
-import "@typechain/hardhat";
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomiclabs/hardhat-ethers";
-import "@nomiclabs/hardhat-waffle";
-import "solidity-coverage";
+require("@typechain/hardhat");
+require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-waffle");
+require("solidity-coverage");
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
-const config: HardhatUserConfig = {
+const config = {
 	solidity: "0.8.17",
 	paths: {
 		sources: "./contracts/",

@@ -1,17 +1,15 @@
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { FreeNFT } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
 
 describe("FreeNFT", function () {
-	let owner: SignerWithAddress;
-	let user: SignerWithAddress;
-	let erc721: FreeNFT;
+	let owner;
+	let user;
+	let erc721;
 
 	beforeEach(async function () {
 		[owner, user] = await ethers.getSigners();
 		const erc721Factory = await ethers.getContractFactory("FreeNFT");
-		erc721 = (await erc721Factory.connect(owner).deploy()) as FreeNFT;
+		erc721 = await erc721Factory.connect(owner).deploy();
 	});
 
 	it("gets token URL", async function () {

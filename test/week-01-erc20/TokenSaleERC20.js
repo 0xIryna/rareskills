@@ -1,14 +1,12 @@
-import { ethers } from "hardhat";
-import { utils } from "ethers";
-import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { TokenSaleERC20 } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { utils } = require("ethers");
+const { expect } = require("chai");
 
 describe("TokenSaleERC20", function () {
-	let owner: SignerWithAddress;
-	let user1: SignerWithAddress;
-	let user2: SignerWithAddress;
-	let erc20: TokenSaleERC20;
+	let owner;
+	let user1;
+	let user2;
+	let erc20;
 
 	beforeEach(async function () {
 		[owner, user1, user2] = await ethers.getSigners();

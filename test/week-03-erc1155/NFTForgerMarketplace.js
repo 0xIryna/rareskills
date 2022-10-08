@@ -1,13 +1,11 @@
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ForgeableNFT, NFTForgerMarketplace } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
 
 describe("NFTForgerMarketplace", function () {
-	let owner: SignerWithAddress;
-	let user: SignerWithAddress;
-	let nft: ForgeableNFT;
-	let marketplace: NFTForgerMarketplace;
+	let owner;
+	let user;
+	let nft;
+	let marketplace;
 
 	beforeEach(async function () {
 		[owner, user] = await ethers.getSigners();

@@ -1,18 +1,16 @@
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { utils } from "ethers";
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { RefundableERC20 } from "../../typechain-types";
+const { ethers } = require("hardhat");
+const { expect } = require("chai");
+const { utils } = require("ethers");
 
 describe("RefundableERC20", function () {
-	let owner: SignerWithAddress;
-	let user: SignerWithAddress;
-	let erc20: RefundableERC20;
+	let owner;
+	let user;
+	let erc20;
 
 	beforeEach(async function () {
 		[owner, user] = await ethers.getSigners();
 		const erc20Factory = await ethers.getContractFactory("RefundableERC20");
-		erc20 = (await erc20Factory.connect(owner).deploy("Test", "TEST")) as RefundableERC20;
+		erc20 = await erc20Factory.connect(owner).deploy("Test", "TEST")
 	});
 
 	it("user cannot buy without providing ETH", async function () {
