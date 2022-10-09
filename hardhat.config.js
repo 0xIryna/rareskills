@@ -6,7 +6,8 @@ require("solidity-coverage");
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
-const config = {
+
+module.exports = {
 	solidity: "0.8.17",
 	paths: {
 		sources: "./contracts/",
@@ -21,5 +22,3 @@ const config = {
 		},
 	},
 };
-
-export default config;
